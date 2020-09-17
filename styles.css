@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main_header {
+  display: inline;
+}
+
+.nav ul {
+  margin: 0;
+}
+
+.nav li {
+  display: inline;
+}
+
+.nav a {
+  display: inline-block;
+  padding: 0.5em;
+  font-size: 1em; /* "vw" changes the font size depening on the size of the screen*/
+  color: white;
+  text-decoration: none;
+  margin: 0.3em;
+  border-radius: 5px;
+}
+
+.nav {
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.main_nav {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav li {
+  padding: 0% 5%;
+}
+
+.nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+body {
+  background-color: #111111;
+  color: white;
+  min-width: 700px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(rgba(0, 0, 0, 0), rgb(46, 46, 46));
+  border-radius: 6px;
+}
