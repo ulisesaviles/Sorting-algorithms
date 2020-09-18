@@ -39,6 +39,7 @@ body {
 .nav ul {
   display: inline-flex;
   align-items: center;
+  width: 100%;
 }
 
 .nav ul {
@@ -61,6 +62,9 @@ body {
   text-align: center;
   font-size: 1.1em;
   align-self: flex-end;
+  padding-right: 8vw;
+  flex: 1;
+  flex-grow: inherit;
 }
 
 .nav li {
