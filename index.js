@@ -80,6 +80,7 @@ function displayChanges() {
 
 function bubbleSort() {
   instructionNumber = 0;
+  swapHistorial = [];
   for (var i = 0; i < arrayOfValues.length; i++) {
     for (var j = 0; j < arrayOfValues.length - 1; j++) {
       if (arrayOfValues[j] > arrayOfValues[j + 1]) {
@@ -91,15 +92,58 @@ function bubbleSort() {
 }
 
 function modifiedBubbleSort() {
-  swapValues(2, 0);
+  instructionNumber = 0;
+  swapHistorial = [];
+  let flag;
+  for (let i = 0; i < arrayOfValues.length; i++) {
+    flag = false;
+    for (let j = 0; j < arrayOfValues.length - 1; j++) {
+      if (arrayOfValues[j] > arrayOfValues[j + 1]) {
+        swapValues(j, j + 1);
+        flag = true;
+      }
+    }
+    if (!flag) {
+      break;
+    }
+  }
+  displayChanges();
 }
 
 function selectionSort() {
-  swapValues(3, 0);
+  instructionNumber = 0;
+  swapHistorial = [];
+  let currentMin;
+  let currentMinPosition = 0;
+  for (let i = 0; i < arrayOfValues.length; i++) {
+    currentMin = arrayOfValues[i];
+    for (let j = i; j < arrayOfValues.length; j++) {
+      if (arrayOfValues[j] <= currentMin) {
+        currentMin = arrayOfValues[j];
+        currentMinPosition = j;
+      }
+    }
+    for (; currentMinPosition > i; currentMinPosition--) {
+      swapValues(currentMinPosition, currentMinPosition - 1);
+    }
+  }
+  console.log(swapHistorial);
+  displayChanges();
 }
 
 function insertionSort() {
-  swapValues(4, 0);
+  instructionNumber = 0;
+  swapHistorial = [];
+  for (let i = 0; i < arrayOfValues.length; i++) {
+    for (let j = i; j > 0; j--) {
+      if (arrayOfValues[j - 1] >= arrayOfValues[j]) {
+        swapValues(j, j - 1);
+      } else {
+        break;
+      }
+    }
+  }
+  displayChanges();
 }
 
 function quickSort() {
