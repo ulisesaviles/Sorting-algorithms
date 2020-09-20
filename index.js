@@ -66,14 +66,26 @@ function shuffle() {
 }
 
 function displayChanges() {
+  index1D = 0;
+  index2D = 0;
   for (let i = 0; i < swapHistorial.length; i++) {
     setTimeout(() => {
-      index1 = swapHistorial[i][0][0];
-      index2 = swapHistorial[i][1][0];
-      value1 = swapHistorial[i][0][1];
-      value2 = swapHistorial[i][1][1];
-      document.getElementById(`bar${index1}`).style.height = `${25 * value1}px`;
-      document.getElementById(`bar${index2}`).style.height = `${25 * value2}px`;
+      document.getElementById(`bar${index1D}`).style.backgroundColor = "white";
+      document.getElementById(`bar${index2D}`).style.backgroundColor = "white";
+      index1D = swapHistorial[i][0][0];
+      index2D = swapHistorial[i][1][0];
+      value1D = swapHistorial[i][0][1];
+      value2D = swapHistorial[i][1][1];
+      if (swapHistorial.length - i > 1) {
+        document.getElementById(`bar${index1D}`).style.backgroundColor = "red";
+        document.getElementById(`bar${index2D}`).style.backgroundColor = "red";
+      }
+      document.getElementById(`bar${index1D}`).style.height = `${
+        25 * value1D
+      }px`;
+      document.getElementById(`bar${index2D}`).style.height = `${
+        25 * value2D
+      }px`;
     }, i * 100);
   }
 }
@@ -146,8 +158,21 @@ function insertionSort() {
   displayChanges();
 }
 
-function quickSort() {
-  swapValues(5, 0);
+function quickSort(a, bottomLimit, topLimit) {
+  bottomLimit = bottomLimit != undefined ? bottomLimit : 10;
+  topLimit = topLimit != undefined ? topLimit : arrayOfValues.length;
+  console.log(`Vamos a buscar de ${bottomLimit + 0} a ${topLimit}`);
+  if (topLimit - bottomLimit == 0) {
+    return;
+  }
+  pivot =
+    arrayOfValues[
+      Math.round(Math.random() * (topLimit - bottomLimit)) + bottomLimit - 1
+    ];
+  document.getElementById(`bar${pivot}`).style.backgroundColor = "red";
+  less = [];
+  higher = [];
+  console.log(pivot);
 }
 
 function mergeSort() {
@@ -158,5 +183,8 @@ window.onload = run;
 let arrayOfValues = [];
 let instructionNumber;
 let swapHistorial = [];
-let copyOfValues;
+let index1D;
+let index2D;
+let value1D;
+let value2D;
 run();
