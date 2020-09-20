@@ -16,7 +16,7 @@ function setUp(docName) {
   } else if (docName == "Insertion Sort") {
     document.getElementById("sort_btn").onclick = insertionSort;
   } else if (docName == "Quick Sort") {
-    document.getElementById("sort_btn").onclick = quickSort;
+    document.getElementById("sort_btn").onclick = qs;
   } else if (docName == "Merge Sort") {
     document.getElementById("sort_btn").onclick = mergeSort;
   }
@@ -31,7 +31,6 @@ function updateAllValues() {
 }
 
 function swapValues(index1, index2) {
-  instructionNumber++;
   aux = arrayOfValues[index1];
   arrayOfValues[index1] = arrayOfValues[index2];
   arrayOfValues[index2] = aux;
@@ -39,6 +38,7 @@ function swapValues(index1, index2) {
     [index1, arrayOfValues[index1]],
     [index2, arrayOfValues[index2]],
   ];
+  instructionNumber++;
 }
 
 function run() {
@@ -100,6 +100,7 @@ function bubbleSort() {
       }
     }
   }
+  console.log(swapHistorial);
   displayChanges();
 }
 
@@ -119,6 +120,7 @@ function modifiedBubbleSort() {
       break;
     }
   }
+  console.log(swapHistorial);
   displayChanges();
 }
 
@@ -155,24 +157,74 @@ function insertionSort() {
       }
     }
   }
+  console.log(swapHistorial);
   displayChanges();
 }
 
 function quickSort(a, bottomLimit, topLimit) {
-  bottomLimit = bottomLimit != undefined ? bottomLimit : 10;
-  topLimit = topLimit != undefined ? topLimit : arrayOfValues.length;
-  console.log(`Vamos a buscar de ${bottomLimit + 0} a ${topLimit}`);
-  if (topLimit - bottomLimit == 0) {
+  bottomLimit = bottomLimit != undefined ? bottomLimit : 0;
+  topLimit = topLimit != undefined ? topLimit : arrayOfValues.length - 1;
+
+  if (
+    topLimit - bottomLimit <= 0 ||
+    bottomLimit < 0 ||
+    topLimit >= arrayOfValues.length
+  ) {
     return;
   }
-  pivot =
-    arrayOfValues[
-      Math.round(Math.random() * (topLimit - bottomLimit)) + bottomLimit - 1
-    ];
-  document.getElementById(`bar${pivot}`).style.backgroundColor = "red";
-  less = [];
-  higher = [];
-  console.log(pivot);
+
+  pivotPos = Math.round(Math.random() * (topLimit - bottomLimit)) + bottomLimit;
+  swapValues(pivotPos, topLimit);
+  pivotPos = topLimit;
+  topLimit = pivotPos - 1;
+
+  for (let itemFromLeft_index, itemFromRight_index; ; ) {
+    for (let i = bottomLimit; i <= topLimit; i++) {
+      if (arrayOfValues[i] > arrayOfValues[pivotPos]) {
+        itemFromLeft_index = i;
+        break;
+      }
+    }
+    for (let i = topLimit; i >= bottomLimit; i--) {
+      if (arrayOfValues[i] < arrayOfValues[pivotPos]) {
+        itemFromRight_index = i;
+        break;
+      }
+    }
+
+    if (itemFromLeft_index > itemFromRight_index) {
+      swapValues(pivotPos, itemFromLeft_index);
+      pivotPos = itemFromLeft_index;
+      topLimit++;
+      quickSort("", bottomLimit, pivotPos - 1);
+      quickSort("", pivotPos + 1, topLimit);
+      return;
+    } else if (itemFromLeft_index == undefined) {
+      topLimit = pivotPos - 1;
+      quickSort("", bottomLimit, topLimit);
+      return;
+    } else if (itemFromRight_index == undefined) {
+      swapValues(pivotPos, bottomLimit);
+      pivotPos = bottomLimit;
+      bottomLimit++;
+      topLimit++;
+      bottomLimit = pivotPos + 1;
+      quickSort("", bottomLimit, topLimit);
+      return;
+    }
+
+    swapValues(itemFromLeft_index, itemFromRight_index);
+    itemFromLeft_index = undefined;
+    itemFromRight_index = undefined;
+  }
+}
+
+function qs() {
+  instructionNumber = 0;
+  swapHistorial = [];
+  quickSort();
+  console.log(swapHistorial);
+  displayChanges();
 }
 
 function mergeSort() {
