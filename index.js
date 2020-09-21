@@ -18,7 +18,7 @@ function setUp(docName) {
   } else if (docName == "Quick Sort") {
     document.getElementById("sort_btn").onclick = qs;
   } else if (docName == "Merge Sort") {
-    document.getElementById("sort_btn").onclick = mergeSort;
+    document.getElementById("sort_btn").onclick = ms;
   }
 }
 
@@ -38,6 +38,12 @@ function swapValues(index1, index2) {
     [index1, arrayOfValues[index1]],
     [index2, arrayOfValues[index2]],
   ];
+  instructionNumber++;
+}
+
+function setValue(index, value) {
+  arrayOfValues[index] = value;
+  setHistorial[instructionNumber] = [index, value];
   instructionNumber++;
 }
 
@@ -65,28 +71,51 @@ function shuffle() {
   updateAllValues();
 }
 
-function displayChanges() {
-  index1D = 0;
-  index2D = 0;
-  for (let i = 0; i < swapHistorial.length; i++) {
-    setTimeout(() => {
-      document.getElementById(`bar${index1D}`).style.backgroundColor = "white";
-      document.getElementById(`bar${index2D}`).style.backgroundColor = "white";
-      index1D = swapHistorial[i][0][0];
-      index2D = swapHistorial[i][1][0];
-      value1D = swapHistorial[i][0][1];
-      value2D = swapHistorial[i][1][1];
-      if (swapHistorial.length - i > 1) {
-        document.getElementById(`bar${index1D}`).style.backgroundColor = "red";
-        document.getElementById(`bar${index2D}`).style.backgroundColor = "red";
-      }
-      document.getElementById(`bar${index1D}`).style.height = `${
-        25 * value1D
-      }px`;
-      document.getElementById(`bar${index2D}`).style.height = `${
-        25 * value2D
-      }px`;
-    }, i * 100);
+function displayChanges(style) {
+  index1Display = 0;
+  index2Display = 0;
+  if (style == "swap") {
+    for (let i = 0; i < swapHistorial.length; i++) {
+      setTimeout(() => {
+        document.getElementById(`bar${index1Display}`).style.backgroundColor =
+          "white";
+        document.getElementById(`bar${index2Display}`).style.backgroundColor =
+          "white";
+        index1Display = swapHistorial[i][0][0];
+        index2Display = swapHistorial[i][1][0];
+        value1D = swapHistorial[i][0][1];
+        value2D = swapHistorial[i][1][1];
+        if (swapHistorial.length - i > 1) {
+          document.getElementById(`bar${index1Display}`).style.backgroundColor =
+            "red";
+          document.getElementById(`bar${index2Display}`).style.backgroundColor =
+            "red";
+        }
+        document.getElementById(`bar${index1Display}`).style.height = `${
+          25 * value1D
+        }px`;
+        document.getElementById(`bar${index2Display}`).style.height = `${
+          25 * value2D
+        }px`;
+      }, i * 100);
+    }
+  } else if (style == "set") {
+    for (let i = 0; i < setHistorial.length; i++) {
+      setTimeout(() => {
+        document.getElementById(`bar${index1Display}`).style.backgroundColor =
+          "white";
+        index1Display = setHistorial[i][0];
+        value1D = setHistorial[i][1];
+        if (setHistorial.length - i > 1) {
+          console.log(index1Display);
+          document.getElementById(`bar${index1Display}`).style.backgroundColor =
+            "red";
+        }
+        document.getElementById(`bar${index1Display}`).style.height = `${
+          25 * value1D
+        }px`;
+      }, i * 100);
+    }
   }
 }
 
@@ -101,7 +130,7 @@ function bubbleSort() {
     }
   }
   console.log(swapHistorial);
-  displayChanges();
+  displayChanges("swap");
 }
 
 function modifiedBubbleSort() {
@@ -121,7 +150,7 @@ function modifiedBubbleSort() {
     }
   }
   console.log(swapHistorial);
-  displayChanges();
+  displayChanges("swap");
 }
 
 function selectionSort() {
@@ -142,7 +171,7 @@ function selectionSort() {
     }
   }
   console.log(swapHistorial);
-  displayChanges();
+  displayChanges("swap");
 }
 
 function insertionSort() {
@@ -158,7 +187,7 @@ function insertionSort() {
     }
   }
   console.log(swapHistorial);
-  displayChanges();
+  displayChanges("swap");
 }
 
 function quickSort(a, bottomLimit, topLimit) {
@@ -224,19 +253,59 @@ function qs() {
   swapHistorial = [];
   quickSort();
   console.log(swapHistorial);
-  displayChanges();
+  displayChanges("swap");
 }
 
-function mergeSort() {
-  swapValues(6, 0);
+function ms() {
+  instructionNumber = 0;
+  swapHistorial = [];
+  setHistorial = [];
+  mergeSort();
+  console.log(setHistorial);
+  displayChanges("set");
+}
+
+function mergeSort(from, to) {
+  from = from == undefined ? 0 : from;
+  to = to == undefined ? arrayOfValues.length : to;
+  if (to - from == 1) {
+    return;
+  }
+
+  mergeSort(from, Math.round((from + to) / 2));
+
+  mergeSort(Math.round((from + to) / 2), to);
+
+  merge(from, to);
+}
+
+function merge(from, to) {
+  let firstPartition = arrayOfValues.slice(from, Math.round((from + to) / 2));
+  let secondPartition = arrayOfValues.slice(Math.round((from + to) / 2), to);
+  let i = 0;
+  for (; firstPartition.length > 0 && secondPartition.length > 0; i++) {
+    if (firstPartition[0] < secondPartition[0]) {
+      setValue(from + i, firstPartition.shift());
+    } else {
+      setValue(from + i, secondPartition.shift());
+    }
+  }
+  while (firstPartition.length > 0) {
+    setValue(from + i, firstPartition.shift());
+    i++;
+  }
+  while (secondPartition.length > 0) {
+    setValue(from + i, secondPartition.shift());
+    i++;
+  }
 }
 
 window.onload = run;
 let arrayOfValues = [];
 let instructionNumber;
 let swapHistorial = [];
-let index1D;
-let index2D;
+let index1Display;
+let index2Display;
 let value1D;
 let value2D;
 run();
