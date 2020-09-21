@@ -1,31 +1,55 @@
+let ammountOfBars = 20;
 function setUp(docName) {
-  for (let i = 0; i < 20; i++) {
+  setBars();
+  document.getElementById("shuffle_btn").onclick = shuffle;
+  document.getElementById("bubbleSort_btn").onclick = bubbleSort;
+  document.getElementById("mBubbleSort_btn").onclick = modifiedBubbleSort;
+  document.getElementById("selectionSort_btn").onclick = selectionSort;
+  document.getElementById("insertionSort_btn").onclick = insertionSort;
+  document.getElementById("quickSort_btn").onclick = qs;
+  document.getElementById("mergeSort_btn").onclick = ms;
+  document.getElementById("btn_5more").onclick = add5Bars;
+  document.getElementById("btn_5less").onclick = remove5Bars;
+}
+
+function add5Bars() {
+  ammountOfBars += 5;
+  if (ammountOfBars > 140) {
+    ammountOfBars = 140;
+  }
+  setBars();
+}
+
+function remove5Bars() {
+  ammountOfBars -= 5;
+  if (ammountOfBars < 5) {
+    ammountOfBars = 5;
+  }
+  setBars();
+}
+
+function setBars() {
+  document.getElementById("bars_container").innerHTML = "";
+  for (let i = 0; i < ammountOfBars; i++) {
+    document.getElementById(
+      "bars_container"
+    ).innerHTML += `<div class="bar bar${i}" id="bar${i}"></div>`;
+  }
+  arrayOfValues = [];
+  for (let i = 0; i < ammountOfBars; i++) {
     arrayOfValues[i] = i;
   }
-  console.log(docName);
-  for (let i = 0; i < 20; i++) {
-    document.getElementById(`bar${i}`).style.height = `${25 * i}px`;
-  }
-  document.getElementById("shuffle_btn").onclick = shuffle;
-  if (docName == "Bubble Sort") {
-    document.getElementById("sort_btn").onclick = bubbleSort;
-  } else if (docName == "Modified Bubble Sort") {
-    document.getElementById("sort_btn").onclick = modifiedBubbleSort;
-  } else if (docName == "Selection Sort") {
-    document.getElementById("sort_btn").onclick = selectionSort;
-  } else if (docName == "Insertion Sort") {
-    document.getElementById("sort_btn").onclick = insertionSort;
-  } else if (docName == "Quick Sort") {
-    document.getElementById("sort_btn").onclick = qs;
-  } else if (docName == "Merge Sort") {
-    document.getElementById("sort_btn").onclick = ms;
+  for (let i = 0; i < ammountOfBars; i++) {
+    document.getElementById(`bar${i}`).style.height = `${
+      (500 / ammountOfBars) * i
+    }px`;
   }
 }
 
 function updateAllValues() {
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < ammountOfBars; i++) {
     document.getElementById(`bar${i}`).style.height = `${
-      25 * arrayOfValues[i]
+      (500 / ammountOfBars) * arrayOfValues[i]
     }px`;
   }
 }
@@ -59,7 +83,7 @@ function shuffle() {
   }
   for (let i = 0; counter < arrayOfValues.length; i++) {
     while (true) {
-      randInt = Math.round(Math.random() * 19);
+      randInt = Math.round(Math.random() * ammountOfBars - 1);
       if (states[randInt] == false) {
         states[randInt] = true;
         arrayOfValues[i] = randInt;
@@ -92,10 +116,10 @@ function displayChanges(style) {
             "red";
         }
         document.getElementById(`bar${index1Display}`).style.height = `${
-          25 * value1D
+          (500 / ammountOfBars) * value1D
         }px`;
         document.getElementById(`bar${index2Display}`).style.height = `${
-          25 * value2D
+          (500 / ammountOfBars) * value2D
         }px`;
       }, i * 100);
     }
@@ -112,7 +136,7 @@ function displayChanges(style) {
             "red";
         }
         document.getElementById(`bar${index1Display}`).style.height = `${
-          25 * value1D
+          (500 / ammountOfBars) * value1D
         }px`;
       }, i * 100);
     }
